@@ -59,7 +59,6 @@ function Dashboard({ Employe }: props) {
     empName: "",
   });
 
-
   const DeleteEmp = (id: deleteProps) => {
     setId(id);
     setShowDelete(!ShowDelete);

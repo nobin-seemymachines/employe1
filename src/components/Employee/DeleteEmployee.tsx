@@ -9,10 +9,9 @@ interface props {
   onClose: () => void;
 }
 
-function DeleteEmployee({  empId, empName, onClose }: props) {
+function DeleteEmployee({ empId, empName, onClose }: props) {
   const [authError, setAuthError] = useState<string>("");
   const navigate = useNavigate();
-
 
   //confirm delete
   const deleEmp = async () => {
@@ -20,7 +19,7 @@ function DeleteEmployee({  empId, empName, onClose }: props) {
       const response = await deleteEmployee({ employeeId: empId });
 
       if (response.status === 201) {
-        onClose()
+        onClose();
         alert(response.data.message);
         navigate("/dashboard");
       } else {

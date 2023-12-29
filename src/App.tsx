@@ -6,6 +6,7 @@ import Register from "./components/Register/Register";
 import Dashboard from "./pages/Dashboard";
 import EditEmployee from "./components/Employee/EditEmployee";
 import ProtectedRoutes from "./services/ProtectedRoutes";
+import Llogin from "./components/Login/Llogin";
 
 function App() {
   
@@ -18,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Llogin />} />
         <Route path="/register" element={<Register />} />
         <Route element={<ProtectedRoutes />}>
           <Route
