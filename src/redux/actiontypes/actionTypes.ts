@@ -9,12 +9,12 @@ interface ApiCallRequestAction {
 
 interface ApiCallSuccessAction {
   type: typeof LOGIN_SUCCESS;
-  payload: object;
+  data: object;
 }
 
 interface ApiCallFailureAction {
   type: typeof LOGIN_FAILURE;
-  message: any;
+  data: any;
 }
 
 export type ActionTypes = ApiCallRequestAction | ApiCallSuccessAction | ApiCallFailureAction;

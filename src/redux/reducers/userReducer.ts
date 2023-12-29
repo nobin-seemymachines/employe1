@@ -21,11 +21,11 @@ export default function userReducer(
       console.log("Loading");
       return { ...state, fetching: true, error: "" };
     case LOGIN_SUCCESS:
-      console.log(action.payload);
-      return { ...state, fetching: false, data: action.payload };
+      console.log(action);
+      return { ...state, fetching: false, data: action.data };
     case LOGIN_FAILURE:
-      console.log(action.message);
-      return { ...state, fetching: false, error: action.message };
+      console.log(action);
+      return { ...state, fetching: false, error: action.data };
     default:
       return state
   }

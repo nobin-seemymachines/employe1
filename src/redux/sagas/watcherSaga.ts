@@ -1,10 +1,9 @@
-import { all } from "axios";
-import { LoginwatcherSaga } from "./loginsaga/LoginWatcherSaga";
-
+import { all } from "redux-saga/effects";
+import { LoginWatcherSaga } from "./loginsaga/LoginWatcherSaga";
 
 function* watcherSaga(){
     yield all([
-        LoginwatcherSaga(),
+        LoginWatcherSaga()
     ]);
 }
 
