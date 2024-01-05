@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
-import { LOGIN_REQUEST } from "../../redux/actiontypes/actionTypes";
+import { LOGIN_REQUEST } from "../../redux/actions/actions";
 
 function Llogin() {
   const dispatch = useAppDispatch();

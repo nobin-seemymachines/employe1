@@ -1,7 +1,7 @@
-// EmployeeTable.tsx
-
 import { Link } from "react-router-dom";
 import { dateConvert } from "../../services/dateConvert";
+import { useAppDispatch } from "../../redux/store";
+import { editEmployeePage } from "../../redux/actions/actions";
 
 interface deleteProps {
   empId: string;
@@ -18,6 +18,9 @@ interface EmployeeTableProps {
 }
 
 function EmployeeList({ displayEmployeeList, Employe, DeleteEmp }: EmployeeTableProps) {
+  
+  const dispatch = useAppDispatch();
+
   return (
     <div className="employee-list">
       {Array.isArray(displayEmployeeList) && displayEmployeeList.length > 0 ? (
@@ -48,7 +51,7 @@ function EmployeeList({ displayEmployeeList, Employe, DeleteEmp }: EmployeeTable
                   <Link
                     to="/employee"
                     onClick={() => {
-                      Employe.setValue(false);
+                      dispatch(editEmployeePage(employee.employeeId))
                       Employe.setEmpId(employee.employeeId);
                     }}
                     className="edit-btn"

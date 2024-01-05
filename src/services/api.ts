@@ -1,26 +1,15 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Credentials } from "../types/types";
 
 const baseUrl = "http://localhost:8000/api";
 
-export const signUp = (data: object) => {
-  return axios.post(`${baseUrl}/users/signup`, data).then((response) => {
-    return response;
-  });
+export const signUp = (data: Credentials) => {
+  return axios.post(`${baseUrl}/users/signup`, data);
 };
 
-export const signIn=(userData:Credentials) =>{
-  return axios.post(`${baseUrl}/users/login`,userData)
-  .then((response: AxiosResponse) => {
-    if (response.data.data.token) {
-      localStorage.setItem("token", response.data.data.token);
-    }
-    return response.data.data;
-  })
-  .catch((error) => {
-    return error.response ? error.response.data : error;
-  });
-}
+export const signIn = (userData: Credentials) => {
+  return axios.post(`${baseUrl}/users/login`, userData);
+};
 
 export const addEmployee = (data: object) => {
   const token = localStorage.getItem("token");

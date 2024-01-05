@@ -8,7 +8,7 @@ const sagaMiddleware: any = createSagaMiddleware();
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(watcherSaga);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = any
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

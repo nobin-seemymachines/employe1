@@ -1,22 +1,15 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Home from "../../pages/Home";
 import "./Register.css";
 import { userValidation } from "./validation";
 import { useNavigate } from "react-router-dom";
 import { signUp } from "../../services/api";
-interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface Error_Msg {
-  email: string;
-  password: string;
-}
+import { Error_Msg, RegisterFormData } from "../../types/types";
+import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
+import { signupRequest } from "../../redux/actions/actions";
 
 function Register() {
-  const [userData, setUserData] = useState<FormData>({
+  const [userData, setUserData] = useState<RegisterFormData>({
     email: "",
     password: "",
     confirmPassword: "",
@@ -30,19 +23,20 @@ function Register() {
   const [authError, setAuthError] = useState("");
 
   const navigate = useNavigate();
-  const Authenticate = async () => {
-    try {
-      const { email, password } = userData;
-      const response = await signUp({ email, password });
+  const dispatch = useAppDispatch();
 
-      if (response.status === 200) {
-        navigate("/");
-      } else {
-        console.log("Authentication failed. Status code:", response.status);
-      }
-    } catch (error: any) {
-      setAuthError(error.response.data.message);
+  const user = useAppSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (user.token) {
+      localStorage.setItem("token", user.token);
+      navigate("/dashboard");
     }
+  });
+
+  const Authenticate = () => {
+    const { email, password } = userData;
+    dispatch(signupRequest({ email, password }));
   };
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -61,7 +55,7 @@ function Register() {
   const buttonText = true;
   return (
     <div className="container">
-      <Home buttonText={buttonText} />
+      <Home />
       <div className="register-page">
         <form onSubmit={onFormSubmit}>
           <h2>Register</h2>
@@ -108,7 +102,7 @@ function Register() {
             <p className="error-message">{errors.password}</p>
           </div>
           <button type="submit">Register</button>
-          <p>{authError}</p>
+          <p>{user.error}</p>
         </form>
       </div>
     </div>

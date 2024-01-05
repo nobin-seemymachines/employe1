@@ -1,6 +1,6 @@
 import { takeLatest } from "redux-saga/effects";
-import { LOGIN_REQUEST } from "../../actiontypes/actionTypes";
 import LoginWorkerSaga from "./LoginWorkerSaga";
+import { LOGIN_REQUEST } from "../../actions/actions";
 
 export function* LoginWatcherSaga() {
     yield takeLatest(LOGIN_REQUEST, LoginWorkerSaga);

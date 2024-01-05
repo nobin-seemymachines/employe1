@@ -1,6 +1,18 @@
-
 import { Link } from "react-router-dom";
-function Home({ buttonText }: { buttonText: boolean }) {
+import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
+import { toggleLoginPage, toggleRegisterPage } from "../redux/actions/actions";
+
+function Home() {
+  const dispatch = useAppDispatch();
+  const isLoginPage = useAppSelector((state: RootState) => state.page.isLoginPage)
+
+  const handleButtonClick = () => {
+    if (isLoginPage) {
+      dispatch(toggleRegisterPage())
+    } else {
+      dispatch(toggleLoginPage())
+    }
+  }
   return (
     <div className="info">
       <h2>information</h2>
@@ -13,10 +25,10 @@ function Home({ buttonText }: { buttonText: boolean }) {
         Commodi officia autem neque laboriosam! Sequi quisquam magni veritatis
         esse vel inventore sint fugit possimus.
       </p>
-      <div className="change-btn">
-      <Link to={buttonText ? "/" : "/register"}>
-        <button >{buttonText ? "Have An Account" : "Create An Account"}</button>
-      </Link>
+      <div className="change-btn" onClick={handleButtonClick}>
+        <Link to={isLoginPage ? "/register" : "/"}>
+          <button>{isLoginPage ? "Create An Account" : "Have An Account"}</button>
+        </Link>
       </div>
     </div>
   );

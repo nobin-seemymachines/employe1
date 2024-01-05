@@ -1,19 +1,11 @@
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Home from "../../pages/Home";
+import { FormData } from "../../types/types";
 import "./Login.css";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { signIn } from "../../services/api";
-
-interface FormData {
-  userData: {
-    email: string;
-    password: string;
-  };
-  errors: {
-    email: string;
-    password: string;
-  };
-}
+import { EMAIL_REGEX } from "../../constants";
+import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
+import { loginRequest } from "../../redux/actions/actions";
 
 function Login() {
   const buttonText = false;
@@ -29,7 +21,17 @@ function Login() {
     },
   });
 
-  const [authError, setAuthError] = useState("");
+  const user = useAppSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (user.token) {
+      localStorage.setItem("token", user.token);
+      navigate("/dashboard");
+    }
+  });
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -50,7 +52,7 @@ function Login() {
     let isValid = true;
     if (
       !formData.userData.email ||
-      !/^\S+@\S+\.\S+$/.test(formData.userData.email)
+      !EMAIL_REGEX.test(formData.userData.email)
     ) {
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -75,19 +77,8 @@ function Login() {
     return isValid;
   };
 
-  const navigate = useNavigate();
-  const Authenticate = async () => {
-    try {
-      const response = await signIn(formData.userData);
-
-      if (response.status === 200) {
-        navigate("/dashboard");
-      } else {
-        console.log("Authentication failed. Status code:", response.status);
-      }
-    } catch (error: any) {
-      setAuthError(error.response.data.message);
-    }
+  const Authenticate = () => {
+    dispatch(loginRequest(formData.userData));
   };
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -99,7 +90,7 @@ function Login() {
   };
   return (
     <div className="container">
-      <Home buttonText={buttonText} />
+      <Home/>
       <div className="login-page">
         <form onSubmit={onFormSubmit}>
           <h2>Login</h2>
@@ -111,9 +102,6 @@ function Login() {
               value={formData.userData.email}
               onChange={handleInputChange}
             />
-            {/* <span className="material-symbols-outlined close-btn">
-              close_small
-            </span> */}
             <p className="error-message">{formData.errors.email}</p>
           </div>
           <div className="input-group">
@@ -124,19 +112,13 @@ function Login() {
               value={formData.userData.password}
               onChange={handleInputChange}
             />
-            {/* <span className="material-symbols-outlined close-btn">
-              close_small
-            </span> */}
             <p className="error-message">{formData.errors.password}</p>
           </div>
-
           <button type="submit">Login</button>
-
-          <p className="error-message">{authError}</p>
+          <p className="error-message">{user.error}</p>
         </form>
       </div>
     </div>
   );
 }
-
 export default Login;

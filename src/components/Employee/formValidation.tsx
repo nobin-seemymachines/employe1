@@ -1,3 +1,5 @@
+import { EMAIL_REGEX, NUMBER_REGEX, PHONE_REGEX } from "../../constants";
+
 interface EmployeeDetails {
   fname: string;
   lname: string;
@@ -20,58 +22,35 @@ interface ValidationErrors {
   phoneNumber: string;
 }
 
-// Validation
+const isEmpty = (value: string | undefined): boolean => !value || !value.trim();
+
 export const validateEmployeeDetails = (
   empDetails: EmployeeDetails
 ): ValidationErrors => {
   const errors: ValidationErrors = {
-    fname: "",
-    lname: "",
-    email: "",
-    dob: "",
-    doj: "",
-    designation: "",
-    experience: "",
-    phoneNumber: "",
+    fname: isEmpty(empDetails.fname) ? "Please enter first name" : "",
+    lname: isEmpty(empDetails.lname) ? "Please enter last name" : "",
+    email: isEmpty(empDetails.email)
+      ? "Please enter email address"
+      : !EMAIL_REGEX.test(empDetails.email.trim())
+      ? "Invalid email address"
+      : "",
+    dob: isEmpty(empDetails.dob) ? "Please enter date of birth" : "",
+    doj: isEmpty(empDetails.doj) ? "Please enter date of join" : "",
+    designation: isEmpty(empDetails.designation)
+      ? "Please enter designation"
+      : "",
+    experience: isEmpty(empDetails.experience)
+      ? "Please enter experience in years"
+      : !NUMBER_REGEX.test(empDetails.experience.trim())
+      ? "Invalid experience"
+      : "",
+    phoneNumber: isEmpty(empDetails.phoneNumber)
+      ? "Please enter phone number"
+      : !PHONE_REGEX.test(empDetails.phoneNumber.trim())
+      ? "Invalid phone number"
+      : "",
   };
-
-  if (!empDetails.fname.trim()) {
-    errors.fname = "Please enter first name";
-  }
-
-  if (!empDetails.lname.trim()) {
-    errors.lname = "Please enter last name";
-  }
-
-  if (!empDetails.email.trim()) {
-    errors.email = "Please enter email address";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(empDetails.email.trim())) {
-    errors.email = "Invalid email address";
-  }
-
-  if (!empDetails.dob) {
-    errors.dob = "Please enter date of birth";
-  }
-
-  if (!empDetails.doj) {
-    errors.doj = "Please enter date of join";
-  }
-
-  if (!empDetails.designation.trim()) {
-    errors.designation = "Please enter designation";
-  }
-
-  if (!empDetails.experience.trim()) {
-    errors.experience = "Please enter experience in years";
-  } else if (!/^\d+$/.test(empDetails.experience.trim())) {
-    errors.experience = "Invalid experience";
-  }
-
-  if (!empDetails.phoneNumber.trim()) {
-    errors.phoneNumber = "Please enter phone number";
-  } else if (!/^\d{10}$/.test(empDetails.phoneNumber.trim())) {
-    errors.phoneNumber = "Invalid phone number";
-  }
 
   return errors;
 };

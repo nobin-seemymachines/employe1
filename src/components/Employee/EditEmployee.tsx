@@ -4,15 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { validateEmployeeDetails } from "./formValidation";
 import { addEmployee, editEmployee, getEmployee } from "../../services/api";
 import { dateConvert } from "../../services/dateConvert";
+import { useAppSelector } from "../../redux/store";
 
-interface Props {
-  empdata: {
-    value: boolean;
-    empId: string;
-  };
-}
+function EditEmployee() {
 
-function EditEmployee({ empdata }: Props) {
+  const employeeIds = useAppSelector((state) => state.employee.employeeId)
+
   //employee details
   const [empDetails, setEmpDetails] = useState({
     fname: "",
@@ -66,7 +63,7 @@ function EditEmployee({ empdata }: Props) {
   const editEmp = async () => {
     try {
       const response = await editEmployee({
-        employeeId: empdata.empId,
+        employeeId: employeeIds,
         ...empDetails,
       });
 
@@ -87,15 +84,15 @@ function EditEmployee({ empdata }: Props) {
     const validationErrors = validateEmployeeDetails(empDetails);
     setErrors(validationErrors);
     if (Object.values(validationErrors).every((error) => !error)) {
-      empdata.value ? addEmp() : editEmp();
+      employeeIds ? editEmp() : addEmp();
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      if (empdata.empId) {
+      if (employeeIds) {
         try {
-          const response = await getEmployee(empdata.empId);
+          const response = await getEmployee(employeeIds);
           const empData = response.data.data.employee;
           console.log("Employee : ", empData);
           setEmpDetails((prevDetails) => ({
@@ -112,18 +109,16 @@ function EditEmployee({ empdata }: Props) {
         } catch (error) {
           console.log("Error fetching employee list:", error);
         }
-      } else {
-        console.log("add employe");
       }
     };
     fetchData();
-  }, [empdata.empId]);
+  }, [employeeIds]);
 
   return (
     <div className="emp">
       <div className="employee-detail">
         <div className="employe-header">
-          <h1>{empdata.value ? "Add Employee" : "Edit Employee"}</h1>
+          <h1>{employeeIds ? "Edit Employee" : "Add Employee"}</h1>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="inputs-grouped">
@@ -231,7 +226,7 @@ function EditEmployee({ empdata }: Props) {
             </div>
             <div className="btn-group">
               <button type="submit">
-                {empdata.value ? "Add Employee" : "Edit"}
+                {employeeIds ? "Edit" : "Add Employee"}
               </button>
               <Link to="/dashboard">
                 <button>Cancel</button>

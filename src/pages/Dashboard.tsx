@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteEmployee from "../components/Employee/DeleteEmployee";
-import { getEmployeeList } from "../services/api";
 import EmployeeList from "../components/Employee/EmployeList";
+import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
+import { addEmployeePage, getEmployeeListAction, logout } from "../redux/actions/actions";
 
 interface props {
   Employe: {
@@ -21,10 +22,20 @@ function Dashboard({ Employe }: props) {
   const [ShowDelete, setShowDelete] = useState<boolean>(false);
   const [employeeList, setEmployeeList] = useState<any[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [displayEmployeeList, setDisplayEmployeeList] = useState<any[]>([]);
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getEmployeeListAction());
+  }, [dispatch]);
+
+  const employeeState = useAppSelector((state: RootState) => state.employee);
+
+  useEffect(() => {
+    setEmployeeList(employeeState.employeeList);
+  }, [employeeState.employeeList]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -51,6 +62,7 @@ function Dashboard({ Employe }: props) {
 
   const logOut = () => {
     localStorage.removeItem("token");
+    dispatch(logout());
     navigate("/");
   };
 
@@ -65,21 +77,6 @@ function Dashboard({ Employe }: props) {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getEmployeeList();
-        console.log(data.data.list);
-        setEmployeeList(data.data.list);
-      } catch (error) {
-        console.log("Error fetching employee list:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [ShowDelete]);
-
-  useEffect(() => {
     setDisplayEmployeeList(employeeList);
   }, [employeeList]);
 
@@ -90,8 +87,7 @@ function Dashboard({ Employe }: props) {
         <Link
           to="/employee"
           onClick={() => {
-            Employe.setValue(true);
-            Employe.setEmpId(null);
+            dispatch(addEmployeePage())
           }}
         >
           <button>Add Employee</button>
@@ -113,7 +109,7 @@ function Dashboard({ Employe }: props) {
         />
         <button onClick={handleSearchClick}>Search</button>
       </div>
-      {isLoading ? (
+      {employeeState.isLoading ? (
         <p>Loading...</p>
       ) : (
         <EmployeeList
