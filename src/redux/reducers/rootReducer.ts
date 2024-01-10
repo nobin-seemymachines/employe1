@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
-import employeeReducer from "./employeeReducer";
 import togglePageReducer from "./togglePageReducer";
+import ListemployeeReducer from "./ListemployeeReducer";
+import employeeReducer from "./employeeReducer";
 
 const rootReducer:any = combineReducers({
   user:userReducer,
-  employee:employeeReducer,
+  Listemployee:ListemployeeReducer,
   page:togglePageReducer,
+  employee:employeeReducer,
 });
 
 export default rootReducer;

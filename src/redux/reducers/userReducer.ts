@@ -1,3 +1,5 @@
+import { SERVER_ERROR } from "../../constants";
+import { fetchToken } from "../../helpers/fetchToken";
 import { State } from "../../types/types";
 import {
   LOGIN_FAILURE,
@@ -10,7 +12,7 @@ import {
 } from "../actions/actions";
 
 const initialState: State = {
-  token: localStorage.getItem("token") || "",
+  token: fetchToken(),
   data: {},
   error: "",
 };
@@ -31,7 +33,7 @@ export default function userReducer(state: State = initialState, action: any) {
         ...state,
         error:
           action.payload === undefined
-            ? "Server not found"
+            ? SERVER_ERROR
             : action.payload.data.message,
       };
     case SIGNUP_REQUEST:
@@ -48,7 +50,7 @@ export default function userReducer(state: State = initialState, action: any) {
         ...state,
         error:
           action.payload === undefined
-            ? "Server not found"
+            ? SERVER_ERROR
             : action.payload.data.message,
       };
     case LOGOUT:

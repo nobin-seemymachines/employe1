@@ -1,9 +1,9 @@
 import { addEmployeePage, editEmployeePage } from "../../actions/actions";
 
-export function* addEmployeeWorkerSaga() {
+export function addEmployeePageWorkerSaga() {
   addEmployeePage();
 }
 
-export function* editEmployeeWorkerSaga(action: any) {
+export function editEmployeePageWorkerSaga(action: any) {
   editEmployeePage(action.payload);
 }

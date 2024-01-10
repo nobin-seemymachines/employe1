@@ -1,6 +1,6 @@
-import { signIn } from "../../../services/api";
 import { call, put } from "redux-saga/effects";
 import { loginFailure, loginSuccess } from "../../actions/actions";
+import { signIn } from "../../../services/api";
 
 function* LoginWorkerSaga(action: any) {
   try {

@@ -4,3 +4,5 @@ export const NUMBER_REGEX: RegExp = /^\d+$/;
 
 export const ADD = "add";
 export const EDIT = "edit";
+
+export const SERVER_ERROR = "Server not found"

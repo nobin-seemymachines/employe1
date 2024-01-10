@@ -1,24 +1,11 @@
 import { Link } from "react-router-dom";
-import { dateConvert } from "../../services/dateConvert";
 import { useAppDispatch } from "../../redux/store";
 import { editEmployeePage } from "../../redux/actions/actions";
+import { EmployeeTableProps } from "../../types/types";
+import { dateConvert } from "../../services/dateConvert";
 
-interface deleteProps {
-  empId: string;
-  empName: string;
-}
+function EmployeeList({ displayEmployeeList, DeleteEmployee }: EmployeeTableProps) {
 
-interface EmployeeTableProps {
-  displayEmployeeList: any[];
-  Employe: {
-    setValue: any;
-    setEmpId: any;
-  };
-  DeleteEmp: (id: deleteProps) => void;
-}
-
-function EmployeeList({ displayEmployeeList, Employe, DeleteEmp }: EmployeeTableProps) {
-  
   const dispatch = useAppDispatch();
 
   return (
@@ -52,15 +39,14 @@ function EmployeeList({ displayEmployeeList, Employe, DeleteEmp }: EmployeeTable
                     to="/employee"
                     onClick={() => {
                       dispatch(editEmployeePage(employee.employeeId))
-                      Employe.setEmpId(employee.employeeId);
                     }}
                     className="edit-btn"
                   >
                     <span>Edit</span>
                   </Link>
-                  <span onClick={() => DeleteEmp({
-                    empId: employee.employeeId,
-                    empName: `${employee.fname} ${employee.lname}`,
+                  <span onClick={() => DeleteEmployee({
+                    employeeId: employee.employeeId,
+                    employeeName: `${employee.fname} ${employee.lname}`,
                   })}>Delete</span>
                 </td>
               </tr>

@@ -6,10 +6,10 @@ import { togglePageWatcherSaga } from "./togglepagesaga/toggleWatcherSaga";
 
 function* watcherSaga() {
   yield all([
-    LoginWatcherSaga(),
-    EmployeeWatcherSaga(),
-    signupWatcherSaga(),
     togglePageWatcherSaga(),
+    LoginWatcherSaga(),
+    signupWatcherSaga(),
+    EmployeeWatcherSaga(),
   ]);
 }
 

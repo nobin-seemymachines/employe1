@@ -42,7 +42,7 @@ export const getEmployeeList = () => {
   };
   return axios.get(`${baseUrl}/employee/list`, { headers }).then((response) => {
     return response.data;
-  });
+  })
 };
 
 export const getEmployee = (empId: string) => {

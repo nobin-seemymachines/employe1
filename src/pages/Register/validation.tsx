@@ -1,15 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-
-interface User {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface Errors {
-  email: string;
-  password: string;
-}
+import { Credentials, RegisterFormData } from "../../types/types";
 
 const emailValidation = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,8 +19,8 @@ const confirmPasswordValidation = (
 };
 
 export const userValidation = (
-  userData: User,
-  setErrors: Dispatch<SetStateAction<Errors>>
+  userData: RegisterFormData,
+  setErrors: Dispatch<SetStateAction<Credentials>>
 ): boolean => {
   setErrors((prevErrors) => ({
     ...prevErrors,
@@ -40,6 +30,7 @@ export const userValidation = (
 
   const isEmailValid = emailValidation(userData.email);
   const isPasswordValid = passwordValidation(userData.password);
+
   const isConfirmPasswordValid = confirmPasswordValidation(
     userData.password,
     userData.confirmPassword
@@ -66,6 +57,5 @@ export const userValidation = (
       password: "Passwords do not match",
     }));
   }
-
   return isEmailValid && isPasswordValid && isConfirmPasswordValid;
 };

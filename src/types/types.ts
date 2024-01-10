@@ -26,17 +26,33 @@ export interface RegisterFormData {
   confirmPassword: string;
 }
 
-export interface Error_Msg {
-  email: string;
-  password: string;
-}
-
 export interface EmployeeState {
-  isLoading:boolean
-employeeList : Array<object>;
-employeeId : string;
+  isLoading: boolean;
+  employeeList: Array<object>;
+  employeeId: string;
 }
 
 export interface pageState {
   isLoginPage: boolean;
+}
+
+export interface props {
+  employeeId: string;
+  employeeName: string;
+}
+
+export interface EmployeeTableProps {
+  displayEmployeeList: any[];
+  DeleteEmployee: (id: props) => void;
+}
+
+export interface EmployeeDetails {
+  fname: string;
+  lname: string;
+  email: string;
+  dob: string;
+  doj: string;
+  designation: string;
+  experience: string;
+  phoneNumber: string;
 }

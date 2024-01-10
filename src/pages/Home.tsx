@@ -3,6 +3,7 @@ import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
 import { toggleLoginPage, toggleRegisterPage } from "../redux/actions/actions";
 
 function Home() {
+  
   const dispatch = useAppDispatch();
   const isLoginPage = useAppSelector((state: RootState) => state.page.isLoginPage)
 
@@ -13,6 +14,7 @@ function Home() {
       dispatch(toggleLoginPage())
     }
   }
+
   return (
     <div className="info">
       <h2>information</h2>

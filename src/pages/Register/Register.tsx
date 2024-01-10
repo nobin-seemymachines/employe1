@@ -1,12 +1,11 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import Home from "../../pages/Home";
-import "./Register.css";
-import { userValidation } from "./validation";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../../services/api";
-import { Error_Msg, RegisterFormData } from "../../types/types";
 import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
 import { signupRequest } from "../../redux/actions/actions";
+import { Credentials, RegisterFormData } from "../../types/types";
+import Home from "../Home";
+import { userValidation } from "./validation";
+import "./Register.css";
 
 function Register() {
   const [userData, setUserData] = useState<RegisterFormData>({
@@ -15,12 +14,10 @@ function Register() {
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<Error_Msg>({
+  const [errors, setErrors] = useState<Credentials>({
     email: "",
     password: "",
   });
-
-  const [authError, setAuthError] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -52,7 +49,6 @@ function Register() {
     setUserData({ ...userData, [name]: value });
   };
 
-  const buttonText = true;
   return (
     <div className="container">
       <Home />

@@ -1,14 +1,20 @@
-// EditEmployee.tsx
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { addNewEmployee, editAnEmployee, getAnEmployee } from "../../redux/actions/actions";
 import { validateEmployeeDetails } from "./formValidation";
-import { addEmployee, editEmployee, getEmployee } from "../../services/api";
 import { dateConvert } from "../../services/dateConvert";
-import { useAppSelector } from "../../redux/store";
 
 function EditEmployee() {
 
-  const employeeIds = useAppSelector((state) => state.employee.employeeId)
+  const state = useAppSelector((state) => state.employee)
+  const { employeeId, isAddEmployee, isEditEmployee, data, error } = state
+
+  useEffect(() => {
+    if (!isAddEmployee && !isEditEmployee) {
+      navigate('/dashboard')
+    }
+  }, [isAddEmployee, isEditEmployee])
 
   //employee details
   const [empDetails, setEmpDetails] = useState({
@@ -35,7 +41,7 @@ function EditEmployee() {
   });
 
   const navigate = useNavigate();
-  const [authError, setAuthError] = useState("");
+  const dispatch = useAppDispatch()
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,40 +49,32 @@ function EditEmployee() {
     setErrors({ ...errors, [name]: "" });
   };
 
-  //Add Employee
-  const addEmp = async () => {
-    try {
-      const response = await addEmployee(empDetails);
-
-      if (response.status === 201) {
-        alert("Employee Added Success");
-        navigate("/dashboard");
-      } else {
-        console.log("Authentication failed. Status code:", response.status);
+  useEffect(() => {
+    const FetchData = async () => {
+      if (employeeId) {
+        try {
+          dispatch(getAnEmployee(employeeId))
+        } catch (error) {
+          console.log("Error fetching employee list:", error);
+        }
       }
-    } catch (error: any) {
-      setAuthError(error.response.data.message);
-    }
-  };
+    };
+    FetchData();
+  }, [employeeId]);
 
-  //Edit Employee
-  const editEmp = async () => {
-    try {
-      const response = await editEmployee({
-        employeeId: employeeIds,
-        ...empDetails,
-      });
-
-      if (response.status === 201) {
-        alert("Employee Edited Success");
-        navigate("/dashboard");
-      } else {
-        console.log("Authentication failed. Status code:", response.status);
-      }
-    } catch (error: any) {
-      setAuthError(error.response.data.message);
-    }
-  };
+  useEffect(() => {
+    setEmpDetails((prevDetails) => ({
+      ...prevDetails,
+      fname: data.fname,
+      lname: data.lname,
+      email: data.email,
+      dob: dateConvert(data.dob),
+      doj: dateConvert(data.doj),
+      designation: data.designation,
+      experience: data.experience,
+      phoneNumber: data.phoneNumber,
+    }));
+  }, [data]);
 
   //Submit Add or Edit Employee
   const handleSubmit = (e: React.FormEvent) => {
@@ -84,41 +82,15 @@ function EditEmployee() {
     const validationErrors = validateEmployeeDetails(empDetails);
     setErrors(validationErrors);
     if (Object.values(validationErrors).every((error) => !error)) {
-      employeeIds ? editEmp() : addEmp();
+      employeeId ? dispatch(editAnEmployee({ employeeId: employeeId, ...empDetails })) : dispatch(addNewEmployee(empDetails));
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (employeeIds) {
-        try {
-          const response = await getEmployee(employeeIds);
-          const empData = response.data.data.employee;
-          console.log("Employee : ", empData);
-          setEmpDetails((prevDetails) => ({
-            ...prevDetails,
-            fname: empData.fname,
-            lname: empData.lname,
-            email: empData.email,
-            dob: dateConvert(empData.dob),
-            doj: dateConvert(empData.doj),
-            designation: empData.designation,
-            experience: empData.experience,
-            phoneNumber: empData.phoneNumber,
-          }));
-        } catch (error) {
-          console.log("Error fetching employee list:", error);
-        }
-      }
-    };
-    fetchData();
-  }, [employeeIds]);
 
   return (
     <div className="emp">
       <div className="employee-detail">
         <div className="employe-header">
-          <h1>{employeeIds ? "Edit Employee" : "Add Employee"}</h1>
+          <h1>{employeeId ? "Edit Employee" : "Add Employee"}</h1>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="inputs-grouped">
@@ -226,13 +198,13 @@ function EditEmployee() {
             </div>
             <div className="btn-group">
               <button type="submit">
-                {employeeIds ? "Edit" : "Add Employee"}
+                {employeeId ? "Edit" : "Add Employee"}
               </button>
               <Link to="/dashboard">
                 <button>Cancel</button>
               </Link>
             </div>
-            <p>{authError}</p>
+            <p>{error}</p>
           </div>
         </form>
       </div>

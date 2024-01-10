@@ -1,41 +1,38 @@
-// Dashboard.tsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import DeleteEmployee from "../components/Employee/DeleteEmployee";
-import EmployeeList from "../components/Employee/EmployeList";
-import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
-import { addEmployeePage, getEmployeeListAction, logout } from "../redux/actions/actions";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { addEmployeePage, getEmployeeListAction, logout, openDeletePopup } from "../redux/actions/actions";
+import EmployeeList from "./Employee/EmployeList";
+import EmployeeDelete from "./Employee/DeleteEmployee";
+import { props } from "../types/types";
 
-interface props {
-  Employe: {
-    setValue: any;
-    setEmpId: any;
-  };
-}
+function Dashboard() {
+  const state = useAppSelector((state) => state)
+  const employeeState = state.Listemployee;
+  const isDeleteOpen = state.employee.isDeleteEmployee
 
-interface deleteProps {
-  empId: string;
-  empName: string;
-}
-
-function Dashboard({ Employe }: props) {
-  const [ShowDelete, setShowDelete] = useState<boolean>(false);
   const [employeeList, setEmployeeList] = useState<any[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [displayEmployeeList, setDisplayEmployeeList] = useState<any[]>([]);
+  const [id, setId] = useState({
+    employeeId: "",
+    employeeName: "",
+  });
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getEmployeeListAction());
-  }, [dispatch]);
-
-  const employeeState = useAppSelector((state: RootState) => state.employee);
+  }, [dispatch, isDeleteOpen]);
 
   useEffect(() => {
     setEmployeeList(employeeState.employeeList);
-  }, [employeeState.employeeList]);
+  }, [employeeState]);
+
+  useEffect(() => {
+    setDisplayEmployeeList(employeeList);
+  }, [employeeList]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value);
@@ -46,17 +43,17 @@ function Dashboard({ Employe }: props) {
       searchInput.trim() === ""
         ? employeeList
         : employeeList.filter((employee) => {
-            const fullName =
-              `${employee.fname} ${employee.lname}`.toLowerCase();
-            const email = employee.email.toLowerCase();
-            const designation = employee.designation.toLowerCase();
+          const fullName =
+            `${employee.fname} ${employee.lname}`.toLowerCase();
+          const email = employee.email.toLowerCase();
+          const designation = employee.designation.toLowerCase();
 
-            return (
-              fullName.includes(searchInput.toLowerCase()) ||
-              email.includes(searchInput.toLowerCase()) ||
-              designation.includes(searchInput.toLowerCase())
-            );
-          });
+          return (
+            fullName.includes(searchInput.toLowerCase()) ||
+            email.includes(searchInput.toLowerCase()) ||
+            designation.includes(searchInput.toLowerCase())
+          );
+        });
     setDisplayEmployeeList(filteredEmployeeList);
   };
 
@@ -66,19 +63,10 @@ function Dashboard({ Employe }: props) {
     navigate("/");
   };
 
-  const [id, setId] = useState<deleteProps>({
-    empId: "",
-    empName: "",
-  });
-
-  const DeleteEmp = (id: deleteProps) => {
+  const DeleteEmployee = (id: props) => {
     setId(id);
-    setShowDelete(!ShowDelete);
+    dispatch(openDeletePopup())
   };
-
-  useEffect(() => {
-    setDisplayEmployeeList(employeeList);
-  }, [employeeList]);
 
   return (
     <div className="dashboard-container">
@@ -87,12 +75,12 @@ function Dashboard({ Employe }: props) {
         <Link
           to="/employee"
           onClick={() => {
-            dispatch(addEmployeePage())
+            dispatch(addEmployeePage()
+            )
           }}
         >
           <button>Add Employee</button>
         </Link>
-
         <button onClick={logOut}>Logout</button>
       </div>
       <div className="header">
@@ -114,15 +102,13 @@ function Dashboard({ Employe }: props) {
       ) : (
         <EmployeeList
           displayEmployeeList={displayEmployeeList}
-          Employe={Employe}
-          DeleteEmp={DeleteEmp}
+          DeleteEmployee={DeleteEmployee}
         />
       )}
-      {ShowDelete && (
-        <DeleteEmployee
-          empId={id.empId}
-          empName={id.empName}
-          onClose={() => setShowDelete(false)}
+      {isDeleteOpen && (
+        <EmployeeDelete
+          employeeId={id.employeeId}
+          employeeName={id.employeeName}
         />
       )}
     </div>

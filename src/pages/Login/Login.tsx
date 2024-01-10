@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Home from "../../pages/Home";
-import { FormData } from "../../types/types";
-import "./Login.css";
-import { EMAIL_REGEX } from "../../constants";
 import { RootState, useAppDispatch, useAppSelector } from "../../redux/store";
 import { loginRequest } from "../../redux/actions/actions";
+import Home from "../Home";
+import { FormData } from "../../types/types";
+import { EMAIL_REGEX } from "../../constants";
+import "./Login.css";
 
 function Login() {
-  const buttonText = false;
 
   const [formData, setFormData] = useState<FormData>({
     userData: {
@@ -28,7 +27,7 @@ function Login() {
       localStorage.setItem("token", user.token);
       navigate("/dashboard");
     }
-  });
+  }, [user]);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -77,20 +76,17 @@ function Login() {
     return isValid;
   };
 
-  const Authenticate = () => {
-    dispatch(loginRequest(formData.userData));
-  };
-
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isValid = validateData();
     if (isValid) {
-      Authenticate();
+      dispatch(loginRequest(formData.userData));
     }
   };
+
   return (
     <div className="container">
-      <Home/>
+      <Home />
       <div className="login-page">
         <form onSubmit={onFormSubmit}>
           <h2>Login</h2>
@@ -121,4 +117,5 @@ function Login() {
     </div>
   );
 }
+
 export default Login;
