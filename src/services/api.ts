@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Credentials } from "../types/types";
+import { fetchToken } from "../helpers/fetchToken";
 
 const baseUrl = "http://localhost:8000/api";
 
@@ -12,7 +13,7 @@ export const signIn = (userData: Credentials) => {
 };
 
 export const addEmployee = (data: object) => {
-  const token = localStorage.getItem("token");
+  const token = fetchToken();
   const headers = {
     Authorization: token,
   };
@@ -24,7 +25,7 @@ export const addEmployee = (data: object) => {
 };
 
 export const editEmployee = (data: object) => {
-  const token = localStorage.getItem("token");
+  const token = fetchToken();
   const headers = {
     Authorization: token,
   };
@@ -36,17 +37,17 @@ export const editEmployee = (data: object) => {
 };
 
 export const getEmployeeList = () => {
-  const token = localStorage.getItem("token");
+  const token = fetchToken();
   const headers = {
     Authorization: token,
   };
   return axios.get(`${baseUrl}/employee/list`, { headers }).then((response) => {
     return response.data;
-  })
+  });
 };
 
 export const getEmployee = (empId: string) => {
-  const token = localStorage.getItem("token");
+  const token = fetchToken();
   const headers = {
     Authorization: token,
   };
@@ -58,7 +59,7 @@ export const getEmployee = (empId: string) => {
 };
 
 export const deleteEmployee = (data: object) => {
-  const token = localStorage.getItem("token");
+  const token = fetchToken();
   const headers = {
     Authorization: token,
   };

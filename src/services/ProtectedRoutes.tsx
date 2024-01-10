@@ -1,9 +1,10 @@
 import { Outlet, Navigate } from 'react-router-dom'
+import { fetchToken } from '../helpers/fetchToken'
 
 const ProtectedRoutes = () => {
-    let token = localStorage.getItem("token")
-    return(
-        token ? <Outlet/> : <Navigate to="/"/>
+    let token = fetchToken()
+    return (
+        token ? <Outlet /> : <Navigate to="/" />
     )
 }
 

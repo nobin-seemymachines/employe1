@@ -41,7 +41,6 @@
     margin-right: 15px;
 }
 
-
 .delete-box p {
     color: red;
 }
@@ -58,12 +57,10 @@
 }
 
 .inputs-grouped {
-
     margin-top: 1.5em;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2em;
-
 }
 
 .inputs-grouped input {
@@ -73,7 +70,6 @@
 .input-grid-group {
     display: flex;
     justify-content: space-between;
-
 }
 
 .input-grid-group input {
@@ -83,7 +79,6 @@
 .input-grid-group .input-group span {
     right: 1.5em;
 }
-
 
 .btn-group {
     display: flex;

@@ -27,28 +27,32 @@ const initialState = {
   isDeleteEmployee: false,
 };
 
-export default function employeeReducer(
-  state = initialState,
-  action: any
-) {
+export default function employeeReducer(state = initialState, action: any) {
   switch (action.type) {
     case ADD_EMPLOYEE_PAGE:
-      return { ...state, employeeId: "", isAddEmployee: true };
+      return { ...state, employeeId: "", isAddEmployee: true, data: {} };
     case EDIT_EMPLOYEE_PAGE:
       return { ...state, employeeId: action.payload, isEditEmployee: true };
     case ADD_NEW_EMPLOYEE:
-      return { ...state, data: {}, error: "" };
+      return { ...state, data: {}, error: "", employeeId: "" };
     case ADD_NEW_EMPLOYEE_SUCCESS:
-      return { ...state, isAddEmployee: false, error: "" };
+      return {
+        ...state,
+        isAddEmployee: false,
+        error: "",
+        employeeId: "",
+        data: {},
+      };
     case ADD_NEW_EMPLOYEE_FAILED:
       return {
         ...state,
         error: action.payload.response.data.message || SERVER_ERROR,
+        employeeId: "",
       };
     case EDIT_EMPLOYEE:
       return { ...state, error: "" };
     case EDIT_EMPLOYEE_SUCCESS:
-      return { ...state, isEditEmployee: false, error: "" };
+      return { ...state, isEditEmployee: false, error: "",data:{},isAddEmployee:false };
     case EDIT_EMPLOYEE_FAILED:
       return { ...state, error: action.payload.response.data || SERVER_ERROR };
     case GET_AN_EMPLOYEE:

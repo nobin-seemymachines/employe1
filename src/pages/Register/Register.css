@@ -5,7 +5,6 @@
     align-items: center;
     justify-content: space-between;
     flex: 1;
-    /* background-color: green; */
 }
 
 .register-page {
@@ -25,7 +24,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* gap: 25px; */
     padding: 50px;
 }
 
@@ -34,7 +32,6 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
-
 }
 
 .input-group label {
@@ -55,7 +52,6 @@
     position: absolute;
     top: 1.3em;
     right: 0.4em;
- 
 }
 
 .input-group input {
@@ -84,10 +80,10 @@
     right: 2.5em;
     font-size: 25px;
 }
-.register-page form p{
-    color:red;
-}
 
+.register-page form p {
+    color: red;
+}
 
 .input-group p {
     color: red;

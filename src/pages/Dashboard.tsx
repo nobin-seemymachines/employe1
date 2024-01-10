@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../redux/store";
+import { RootState, useAppDispatch, useAppSelector } from "../redux/store";
 import { addEmployeePage, getEmployeeListAction, logout, openDeletePopup } from "../redux/actions/actions";
 import EmployeeList from "./Employee/EmployeList";
 import EmployeeDelete from "./Employee/DeleteEmployee";
 import { props } from "../types/types";
 
 function Dashboard() {
-  const state = useAppSelector((state) => state)
+  const state: RootState = useAppSelector((state: RootState) => state)
   const employeeState = state.Listemployee;
   const isDeleteOpen = state.employee.isDeleteEmployee
 

@@ -1,14 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { Credentials, RegisterFormData } from "../../types/types";
+import { EMAIL_REGEX, PASSWORD_REGEX } from "../../constants";
 
 const emailValidation = (email: string): boolean => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  return EMAIL_REGEX.test(email);
 };
 
 const passwordValidation = (password: string): boolean => {
-  const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
-  return passwordRegex.test(password);
+  return PASSWORD_REGEX.test(password);
 };
 
 const confirmPasswordValidation = (
